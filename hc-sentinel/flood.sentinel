@@ -1,0 +1,34 @@
+# Policy to deny new deployments during severe flood situations
+
+import "http"
+import "json"
+import "strings"
+import "time"
+
+base_url="https://environment.data.gov.uk/flood-monitoring/id/floods"
+severe_flood_level = "1"
+flood_area = "West Thames"
+area_code = "061FAG22LamVal"
+min_sev_url = base_url + "?min-severity=" + severe_flood_level
+resp = http.get(min_sev_url)
+items = json.unmarshal(resp.body)["items"]
+
+alert_flood = func () {
+    is_safe = true
+# Check if API returns empty set against mentioned severity level
+    if(length(items) < int(1)) {
+    is_safe = true
+    } else {
+        if((flood_area in items[0]["eaAreaName"]) and (area_code in items[0]["floodAreaID"])) {
+        is_safe = false
+        print("POLICY FAILED: Severe Flood warning alerted in your area.")
+        print("Your area", flood_area, "has been indicated flood alert severity level", severe_flood_level, ".")
+        print("This catostrophic situation is to save your life, not to change IT :)")     
+        }
+    }
+    return is_safe
+}
+
+main = rule {
+    alert_flood() else false
+}

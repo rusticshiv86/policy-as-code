@@ -1,0 +1,25 @@
+import "http"
+import "json"
+import "strings"
+import "time"
+
+base_url = "https://coronavirus-19-api.herokuapp.com/countries/"
+country = "Belgium"
+threshold = int(500)
+full_url = base_url + country
+resp = http.get(full_url)
+death_per_million_raw = json.unmarshal(resp.body)["deathsPerOneMillion"]
+death_per_million = int(death_per_million_raw)
+check_health_factor = func () {
+    is_safe = true
+    if int(death_per_million) > threshold {
+        is_safe = false
+        print("Unfortunately our country", country, "is running through a pandemic of Covid-19.")
+        print("Deaths per million is", death_per_million, "crossing threshold of", threshold, ". Please stay safe and deploy automatically")
+    }
+   return is_safe 
+}
+
+main = rule {
+    check_health_factor() else false
+}
