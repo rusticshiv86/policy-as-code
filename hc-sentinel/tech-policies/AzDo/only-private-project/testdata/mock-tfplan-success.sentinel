@@ -1,0 +1,33 @@
+terraform_version = "0.12.26"
+
+resource_changes = {
+
+	"azuredevops_project.ado_prj": {
+		"address": "azuredevops_project.ado_prj",
+		"change": {
+			"actions": [
+				"create",
+			],
+			"after": {
+				"description":        null,
+				"features":           null,
+				"project_name":       "demo_project",
+				"version_control":    "Git",
+				"visibility":         "private",
+				"work_item_template": "Agile",
+			},
+			"after_unknown": {
+				"id": true,
+				"process_template_id": true,
+			},
+			"before": null,
+		},
+		"deposed":        "",
+		"index":          null,
+		"mode":           "managed",
+		"module_address": "",
+		"name":           "ado_prj",
+		"provider_name":  "azuredevops",
+		"type":           "azuredevops_project",
+	},
+}

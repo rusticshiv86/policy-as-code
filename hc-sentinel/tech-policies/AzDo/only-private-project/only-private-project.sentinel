@@ -1,0 +1,21 @@
+import "tfplan/v2" as tfplan
+
+allprojects = filter tfplan.resource_changes as _, resource_changes {
+	resource_changes.type is "azuredevops_project" and
+		resource_changes.mode is "managed" and
+		(resource_changes.change.actions contains "create" or
+			resource_changes.change.actions is ["update"])
+}
+
+print("Ensure only private projects get created")
+
+deny_public_projects = rule {
+	all allprojects as _, projects {
+		keys(projects.change.after) contains "visibility" and
+        projects.change.after.visibility is "private"
+	}
+}
+
+main = rule {
+	deny_public_projects
+}

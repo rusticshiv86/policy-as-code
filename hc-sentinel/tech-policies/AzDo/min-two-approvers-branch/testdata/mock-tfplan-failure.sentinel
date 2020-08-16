@@ -1,0 +1,57 @@
+terraform_version = "0.12.26"
+
+resource_changes = {
+	"azuredevops_branch_policy_min_reviewers.repo_review": {
+		"address": "azuredevops_branch_policy_min_reviewers.repo_review",
+		"change": {
+			"actions": [
+				"create",
+			],
+			"after": {
+				"blocking": true,
+				"enabled":  true,
+				"settings": [
+					{
+						"reviewer_count": 1,
+						"scope": [
+							{
+								"match_type": "Exact",
+							},
+							{
+								"match_type":     "Prefix",
+								"repository_ref": "refs/heads/releases",
+							},
+						],
+						"submitter_can_vote": false,
+					},
+				],
+			},
+			"after_unknown": {
+				"id":         true,
+				"project_id": true,
+				"settings": [
+					{
+						"scope": [
+							{
+								"repository_id":  true,
+								"repository_ref": true,
+							},
+							{
+								"repository_id": true,
+							},
+						],
+					},
+				],
+			},
+			"before": null,
+		},
+		"deposed":        "",
+		"index":          null,
+		"mode":           "managed",
+		"module_address": "",
+		"name":           "repo_review",
+		"provider_name":  "azuredevops",
+		"type":           "azuredevops_branch_policy_min_reviewers",
+	},
+	
+	}

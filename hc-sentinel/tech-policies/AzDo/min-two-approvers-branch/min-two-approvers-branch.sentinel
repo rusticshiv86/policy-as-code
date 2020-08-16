@@ -1,0 +1,22 @@
+import "tfplan/v2" as tfplan
+
+allreviews = filter tfplan.resource_changes as _, resource_changes {
+	resource_changes.type is "azuredevops_branch_policy_min_reviewers" and
+		(resource_changes.change.actions contains "create" or
+			resource_changes.change.actions is ["update"])
+}
+
+print("Ensure min 2 reviweres for master branch")
+
+deny_less_than_two_reviewers = rule {
+	all allreviews as _, reviews {
+		keys(reviews.change.after) contains "settings" and
+			all reviews.change.after.settings as _, settings {
+                settings.reviewer_count > 1
+            }
+	}
+}
+
+main = rule {
+	deny_less_than_two_reviewers
+}
